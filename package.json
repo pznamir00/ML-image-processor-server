@@ -4,6 +4,7 @@
   "description": "Images processing server based on AWS and NodeJS",
   "main": "src/app.js",
   "scripts": {
+    "start": "node src/app.js",
     "test": "npm run test"
   },
   "repository": {

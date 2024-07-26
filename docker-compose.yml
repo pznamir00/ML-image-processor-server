@@ -1,0 +1,19 @@
+version: "1.0"
+
+services:
+  db:
+    image: postgres
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  server:
+    build: .
+    volumes:
+      - ./data/db:/var/lib/server/data
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
