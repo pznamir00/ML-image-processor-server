@@ -6,7 +6,9 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT;
 
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
+  const {Dataset} = require('../models')
+  console.log(await Dataset.findAll())
   res.send('Express + TypeScript Server');
 });
 
