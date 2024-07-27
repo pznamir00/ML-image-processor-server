@@ -13,9 +13,14 @@ services:
       - "5432:5432"
   server:
     build: .
+    restart: always
     volumes:
       - ./data/db:/var/lib/server/data
-    ports:
-      - "8000:8000"
+    develop:
+      watch:
+        - action: rebuild
+          path: package.json
+      ports:
+        - "8000:8000"
     depends_on:
       - db

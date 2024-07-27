@@ -1,1 +1,0 @@
-require('nodemon')('./src/app')
