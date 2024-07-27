@@ -1,19 +1,20 @@
 import express from "express";
+import bodyParser from "body-parser";
 import dotenv from "dotenv";
-import Dataset from "./database/models/dataset";
-import Augmentation from "./database/models/augmentation";
+import datasetsRouter from "./routings/datasets.routing";
 
 dotenv.config();
-
-const app = express();
 const port = process.env.PORT;
 
-app.get("/datasets", async (req, res) => {
-  const datasets = await Dataset.findAll({
-    include: { model: Augmentation, as: Augmentation.tableName },
-  });
-  res.send(datasets);
-});
+const app = express();
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
+app.use(bodyParser.json());
+
+app.use("/api/datasets", datasetsRouter);
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);

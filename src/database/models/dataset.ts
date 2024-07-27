@@ -4,6 +4,7 @@ import { DatasetTypes } from "types/dataset-types.enum";
 import Augmentation from "./augmentation";
 
 interface DatasetAttributes {
+  id?: number;
   name: string;
   type: DatasetTypes;
 }
