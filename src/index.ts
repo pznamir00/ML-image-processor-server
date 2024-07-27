@@ -10,7 +10,7 @@ const port = process.env.PORT;
 
 app.get("/datasets", async (req, res) => {
   const datasets = await Dataset.findAll({
-    include: { model: Augmentation, as: "Augmentations" },
+    include: { model: Augmentation, as: Augmentation.tableName },
   });
   res.send(datasets);
 });

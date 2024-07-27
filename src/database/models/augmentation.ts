@@ -36,6 +36,4 @@ Augmentation.init(
   }
 );
 
-// Augmentation.belongsTo(Dataset);
-
 export default Augmentation;
