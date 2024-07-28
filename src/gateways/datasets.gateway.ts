@@ -13,7 +13,9 @@ export const checkDatasetExistsById = async (id: number) => {
 };
 
 export const findDatasetById = async (id: number) => {
-  return await Dataset.findByPk(id);
+  return await Dataset.findByPk(id, {
+    include: { model: Augmentation, as: Augmentation.tableName },
+  });
 };
 
 export const createDataset = async (data: Dataset) => {
@@ -25,6 +27,5 @@ export const updateDatasetById = async (id: number, data: Dataset) => {
 };
 
 export const deleteDatasetById = async (id: number) => {
-  const count = await Dataset.destroy({ where: { id } });
-  return count === 1;
+  await Dataset.destroy({ where: { id } });
 };

@@ -7,9 +7,9 @@
     "start": "node dist/index.js",
     "build": "tsc",
     "dev": "nodemon src/index.ts",
-    "test": "node --experimental-vm-modules node_modules/.bin/jest",
-    "db:create": "sequelize-cli db:create",
-    "db:migrate": "sequelize-cli db:migrate"
+    "test:unit": "node node_modules/.bin/jest --testPathPattern='^(?!.*.integration.test.ts$).*$'",
+    "test:integration": "tests/integration/start-db.sh && node node_modules/.bin/jest --runInBand --testPathPattern='.integration.test.ts$'; JEST_EXIT_CODE=$?; tests/integration/tear-down-db.sh; exit $JEST_EXIT_CODE",
+    "test:all": "npm run test:unit && npm run test:integration"
   },
   "repository": {
     "type": "git",
