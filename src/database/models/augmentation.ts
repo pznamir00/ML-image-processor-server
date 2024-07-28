@@ -1,7 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 import connection from "../connection";
 import { AugmentationAlgorithms } from "types/augmentation-algorithm.enum";
-import Dataset from "./dataset";
 
 interface AugmentationAttributes {
   algorithm: AugmentationAlgorithms;

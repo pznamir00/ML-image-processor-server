@@ -11,16 +11,3 @@ services:
       - POSTGRES_PASSWORD=postgres
     ports:
       - "5432:5432"
-  server:
-    build: .
-    restart: always
-    volumes:
-      - ./data/db:/var/lib/server/data
-    develop:
-      watch:
-        - action: rebuild
-          path: package.json
-      ports:
-        - "8000:8000"
-    depends_on:
-      - db

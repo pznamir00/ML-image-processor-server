@@ -68,7 +68,7 @@ describe("datasets controller", () => {
     it("calls send", async () => {
       const { req, res } = setup();
       await updateDataset(req, res);
-      expect(res.send).toHaveBeenCalledWith({ dataset: 5 });
+      expect(res.send).toHaveBeenCalledWith();
     });
   });
 

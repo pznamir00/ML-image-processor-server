@@ -12,6 +12,18 @@ export const checkDatasetExistsById = async (id: number) => {
   return count > 0;
 };
 
+/**
+ * returns empty array if all ids are correct, if not, invalid ids
+ * are in the list
+ */
+export const checkDatasetsExistByIds = async (ids: number[]) => {
+  const result = await Dataset.findAll({
+    where: { id: ids },
+  });
+  const resultIds = result.map((i) => i.id);
+  return resultIds.filter((id) => !ids.includes(id));
+};
+
 export const findDatasetById = async (id: number) => {
   return await Dataset.findByPk(id, {
     include: { model: Augmentation, as: Augmentation.tableName },

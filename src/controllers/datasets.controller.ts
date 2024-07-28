@@ -17,8 +17,8 @@ export const retrieveDataset = async (req: Request, res: Response) => {
 };
 
 export const updateDataset = async (req: Request, res: Response) => {
-  const dataset = await gateway.updateDatasetById(+req.params.id, req.body);
-  res.send(dataset);
+  await gateway.updateDatasetById(+req.params.id, req.body);
+  res.send();
 };
 
 export const deleteDataset = async (req: Request, res: Response) => {
