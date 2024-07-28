@@ -3,7 +3,6 @@ import datasetsRouter from "./datasets.routing";
 import Dataset from "../database/models/dataset";
 import { DatasetTypes } from "../types/dataset-types.enum";
 import request from "supertest";
-import Augmentation from "database/models/augmentation";
 
 let savedDatasets: Dataset[] = [];
 let app: express.Express;

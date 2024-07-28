@@ -1,3 +1,4 @@
+import connection from "../database/connection";
 import Image from "../database/models/image";
 
 export const createImagesBatch = async (images: Image[]) => {
@@ -5,7 +6,15 @@ export const createImagesBatch = async (images: Image[]) => {
 };
 
 export const updateImagesBatch = async (images: Image[]) => {
-  await Image.bulkCreate(images, { updateOnDuplicate: ["name"] });
+  const transaction = await connection.transaction();
+  try {
+    for (const image of images) {
+      await Image.update(image, { where: { id: image.id }, transaction });
+    }
+    await transaction.commit();
+  } catch (error) {
+    await transaction.rollback();
+  }
 };
 
 export const deleteImagesBatch = async (ids: number[]) => {
@@ -23,5 +32,5 @@ export const checkImagesExistByIds = async (ids: number[]) => {
     where: { id: ids },
   });
   const resultIds = result.map((i) => i.id);
-  return resultIds.filter((id) => !ids.includes(id));
+  return ids.filter((id) => !resultIds.includes(id));
 };
