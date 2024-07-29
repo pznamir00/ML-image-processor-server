@@ -8,6 +8,7 @@ const checkImagesIdsExist = async (ids: number[]) => {
   if (invalidIds.length) {
     throw new Error(`Images with ids ${invalidIds.join(", ")} do not exist`);
   }
+  return true;
 };
 
 const checkDatasetIdsExist = async (ids: number[]) => {
@@ -15,6 +16,7 @@ const checkDatasetIdsExist = async (ids: number[]) => {
   if (invalidIds.length) {
     throw new Error(`Datasets with ids ${invalidIds.join(", ")} do not exist`);
   }
+  return true;
 };
 
 export const validateCreatingImages = [
@@ -23,8 +25,8 @@ export const validateCreatingImages = [
     .exists()
     .isArray()
     .custom(async (images: Image[]) => {
-      const ids = images.map((img) => img.id);
-      await checkDatasetIdsExist(ids);
+      const ids = images.map((img) => img.datasetId);
+      return await checkDatasetIdsExist(ids);
     }),
 ];
 
@@ -41,7 +43,7 @@ export const validateImagesMetadataBatch = [
     .bail()
     .custom(async (images: Image[]) => {
       const ids = images.map((img) => img.id);
-      await checkImagesIdsExist(ids);
+      return await checkImagesIdsExist(ids);
     }),
   body("images.*").isObject().withMessage("All images must be objects").bail(),
   check("images.*.metadata")

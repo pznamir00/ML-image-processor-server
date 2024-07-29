@@ -3,6 +3,9 @@ import datasetsRouter from "./datasets.routing";
 import Dataset from "../database/models/dataset";
 import { DatasetTypes } from "../types/dataset-types.enum";
 import request from "supertest";
+import Image from "../database/models/image";
+import Augmentation from "../database/models/augmentation";
+import { AugmentationAlgorithms } from "../types/augmentation-algorithm.enum";
 
 let savedDatasets: Dataset[] = [];
 let app: express.Express;
@@ -18,14 +21,12 @@ describe("datasets routing integration", () => {
       expect(response.status).toBe(200);
       expect(response.body).toEqual([
         expect.objectContaining({
-          name: "cat or dog",
-          type: "CLASSIFICATION",
-          Augmentations: [],
-        }),
-        expect.objectContaining({
           name: "clothing",
           type: "OBJECT_DETECTION",
-          Augmentations: [],
+        }),
+        expect.objectContaining({
+          name: "cat or dog",
+          type: "CLASSIFICATION",
         }),
       ]);
     });
@@ -87,7 +88,36 @@ describe("datasets routing integration", () => {
         expect.objectContaining({
           name: savedDatasets[0].name,
           type: savedDatasets[0].type,
-          Augmentations: [],
+          Augmentations: [
+            expect.objectContaining({
+              algorithm: AugmentationAlgorithms.CROP,
+              fromPercentage: 0.1,
+              toPercentage: 0.4,
+              datasetId: savedDatasets[0].id,
+            }),
+            expect.objectContaining({
+              algorithm: AugmentationAlgorithms.NOISE,
+              fromPercentage: 0.44,
+              toPercentage: 0.9,
+              datasetId: savedDatasets[0].id,
+            }),
+          ],
+          Images: [
+            expect.objectContaining({
+              name: "img1.jpg",
+              url: "bucket/images/img1.jpg",
+              datasetId: savedDatasets[0].id,
+              metadata: { class: "cls1" },
+              isUploaded: false,
+            }),
+            expect.objectContaining({
+              name: "img2.jpg",
+              url: "bucket/images/img2.jpg",
+              datasetId: savedDatasets[0].id,
+              metadata: { class: "cls2" },
+              isUploaded: false,
+            }),
+          ],
         })
       );
       expect(response.status).toBe(200);
@@ -178,9 +208,41 @@ async function setupDB() {
     { name: "clothing", type: DatasetTypes.OBJECT_DETECTION },
     { name: "cat or dog", type: DatasetTypes.CLASSIFICATION },
   ]);
+  await Image.bulkCreate([
+    {
+      name: "img1.jpg",
+      url: "bucket/images/img1.jpg",
+      datasetId: datasets[0].id,
+      metadata: { class: "cls1" },
+      isUploaded: false,
+    },
+    {
+      name: "img2.jpg",
+      url: "bucket/images/img2.jpg",
+      datasetId: datasets[0].id,
+      metadata: { class: "cls2" },
+      isUploaded: false,
+    },
+  ]);
+  await Augmentation.bulkCreate([
+    {
+      algorithm: AugmentationAlgorithms.CROP,
+      fromPercentage: 0.1,
+      toPercentage: 0.4,
+      datasetId: datasets[0].id,
+    },
+    {
+      algorithm: AugmentationAlgorithms.NOISE,
+      fromPercentage: 0.44,
+      toPercentage: 0.9,
+      datasetId: datasets[0].id,
+    },
+  ]);
   savedDatasets = datasets.map((ds) => ds.toJSON());
 }
 
 async function tearDownDB() {
   await Dataset.truncate();
+  await Image.truncate();
+  await Augmentation.truncate();
 }

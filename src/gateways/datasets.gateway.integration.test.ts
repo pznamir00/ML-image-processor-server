@@ -8,6 +8,9 @@ import {
   updateDatasetById,
 } from "./datasets.gateway";
 import { DatasetTypes } from "../types/dataset-types.enum";
+import Image from "../database/models/image";
+import Augmentation from "../database/models/augmentation";
+import { AugmentationAlgorithms } from "../types/augmentation-algorithm.enum";
 
 let savedDatasets: Dataset[] = [];
 
@@ -36,8 +39,30 @@ describe("datasets gateway", () => {
 
   describe("findDatasetById", () => {
     it("returns object if id exists in db", async () => {
-      const resp = await findDatasetById(savedDatasets[0].id);
-      expect(resp).toEqual(expect.objectContaining(savedDatasets[0]));
+      const { id } = savedDatasets[0];
+      const resp = await findDatasetById(id);
+      expect(resp?.toJSON()).toEqual(
+        expect.objectContaining({
+          ...savedDatasets[0],
+          Images: [
+            expect.objectContaining({
+              name: "img1.jpg",
+              url: "bucket/images/img1.jpg",
+              isUploaded: false,
+              metadata: {},
+              datasetId: id,
+            }),
+          ],
+          Augmentations: [
+            expect.objectContaining({
+              algorithm: AugmentationAlgorithms.CROP,
+              fromPercentage: 0.2,
+              toPercentage: 0.55,
+              datasetId: id,
+            }),
+          ],
+        })
+      );
     });
 
     it("returns null if id does not exist in db", async () => {
@@ -95,6 +120,19 @@ async function setup() {
     { name: "clothing", type: DatasetTypes.OBJECT_DETECTION },
     { name: "cat or dog", type: DatasetTypes.CLASSIFICATION },
   ]);
+  await Augmentation.create({
+    algorithm: AugmentationAlgorithms.CROP,
+    fromPercentage: 0.2,
+    toPercentage: 0.55,
+    datasetId: datasets[0].id,
+  });
+  await Image.create({
+    name: "img1.jpg",
+    url: "bucket/images/img1.jpg",
+    isUploaded: false,
+    metadata: {},
+    datasetId: datasets[0].id,
+  });
   savedDatasets = datasets.map((ds) => ds.toJSON());
 }
 

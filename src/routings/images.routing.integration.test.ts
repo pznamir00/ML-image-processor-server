@@ -2,8 +2,11 @@ import express from "express";
 import request from "supertest";
 import Image from "../database/models/image";
 import imagesRouter from "./images.routing";
+import Dataset from "../database/models/dataset";
+import { DatasetTypes } from "../types/dataset-types.enum";
 
 let savedImages: Image[] = [];
+let dataset: Dataset;
 let app: express.Express;
 
 describe("images routing integration", () => {
@@ -12,32 +15,39 @@ describe("images routing integration", () => {
   afterEach(tearDownDB);
 
   describe("create batch", () => {
+    it("returns error if datasetId is invalid", async () => {
+      const response = await request(app)
+        .post("/images/batch/")
+        .send({ images: [{ datasetId: -1 }] });
+      expect(response.status).toBe(400);
+    });
+
     it("creates images", async () => {
       const response = await request(app)
         .post("/images/batch/")
-        .send({ images: [{ datasetId: 18 }] });
+        .send({ images: [{ datasetId: dataset.id }] });
       expect(response.status).toBe(201);
-      const saved = await Image.findOne({ where: { datasetId: 18 } });
+      const saved = await Image.findOne({ where: { datasetId: dataset.id } });
       expect(saved).toMatchObject({
         name: "123-abc.jpg",
         url: expect.stringContaining("/images/123-abc.jpg"),
         isUploaded: false,
         metadata: null,
-        datasetId: 18,
+        datasetId: dataset.id,
       });
     });
 
     it("returns newly created images", async () => {
       const response = await request(app)
         .post("/images/batch/")
-        .send({ images: [{ datasetId: 18 }] });
+        .send({ images: [{ datasetId: dataset.id }] });
       expect(response.body).toEqual([
         expect.objectContaining({
           name: "123-abc.jpg",
           url: expect.stringContaining("/images/123-abc.jpg"),
           isUploaded: false,
           metadata: null,
-          datasetId: 18,
+          datasetId: dataset.id,
         }),
       ]);
     });
@@ -81,7 +91,7 @@ describe("images routing integration", () => {
     });
   });
 
-  describe("delete", () => {
+  describe("delete batch", () => {
     it("returns error if payload is invalid", async () => {
       const response = await request(app)
         .delete("/images/batch/")
@@ -107,6 +117,10 @@ function setupApp() {
 }
 
 async function setupDB() {
+  dataset = await Dataset.create({
+    name: "ds",
+    type: DatasetTypes.CLASSIFICATION,
+  });
   const images = await Image.bulkCreate([
     {
       name: "img1.jpg",
@@ -128,6 +142,7 @@ async function setupDB() {
 
 async function tearDownDB() {
   await Image.truncate();
+  await Dataset.truncate();
 }
 
 jest.mock("uuid", () => ({ v4: jest.fn().mockReturnValue("123-abc") }));

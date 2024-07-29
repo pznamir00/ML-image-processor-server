@@ -8,8 +8,10 @@
     "build": "tsc",
     "dev": "nodemon src/index.ts",
     "test:unit": "node node_modules/.bin/jest --testPathPattern='^(?!.*.integration.test.ts$).*$'",
-    "test:integration": "tests/integration/start-db.sh && node node_modules/.bin/jest --runInBand --testPathPattern='.integration.test.ts$'; JEST_EXIT_CODE=$?; tests/integration/tear-down-db.sh; exit $JEST_EXIT_CODE",
-    "test:all": "npm run test:unit && npm run test:integration"
+    "test:integration": "npm run test:integration:db:start && node node_modules/.bin/jest --watch --runInBand --testPathPattern='.integration.test.ts$'; JEST_EXIT_CODE=$?; npm run test:integration:db:teardown; exit $JEST_EXIT_CODE",
+    "test:all": "npm run test:unit && npm run test:integration",
+    "test:integration:db:start": "tests/integration/start-db.sh",
+    "test:integration:db:teardown": "tests/integration/tear-down-db.sh"
   },
   "repository": {
     "type": "git",

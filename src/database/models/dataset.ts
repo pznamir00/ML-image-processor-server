@@ -2,6 +2,7 @@ import { DataTypes, Model } from "sequelize";
 import connection from "../connection";
 import { DatasetTypes } from "types/dataset-types.enum";
 import Augmentation from "./augmentation";
+import Image from "./image";
 
 interface DatasetAttributes {
   id?: number;
@@ -29,6 +30,10 @@ Dataset.init(
 );
 
 Dataset.hasMany(Augmentation, {
+  foreignKey: "datasetId",
+});
+
+Dataset.hasMany(Image, {
   foreignKey: "datasetId",
 });
 

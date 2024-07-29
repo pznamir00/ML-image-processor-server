@@ -28,4 +28,5 @@ export const validateDatasetId = param("id")
     if (!exists) {
       throw new Error(`Dataset with id ${id} does not exist`);
     }
+    return true;
   });

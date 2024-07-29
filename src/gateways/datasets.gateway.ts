@@ -1,10 +1,9 @@
+import Image from "../database/models/image";
 import Augmentation from "../database/models/augmentation";
 import Dataset from "../database/models/dataset";
 
 export const findAllDatasets = async () => {
-  return await Dataset.findAll({
-    include: { model: Augmentation, as: Augmentation.tableName },
-  });
+  return await Dataset.findAll();
 };
 
 export const checkDatasetExistsById = async (id: number) => {
@@ -21,12 +20,15 @@ export const checkDatasetsExistByIds = async (ids: number[]) => {
     where: { id: ids },
   });
   const resultIds = result.map((i) => i.id);
-  return resultIds.filter((id) => !ids.includes(id));
+  return ids.filter((id) => !resultIds.includes(id));
 };
 
 export const findDatasetById = async (id: number) => {
   return await Dataset.findByPk(id, {
-    include: { model: Augmentation, as: Augmentation.tableName },
+    include: [
+      { model: Augmentation, as: Augmentation.tableName },
+      { model: Image, as: Image.tableName },
+    ],
   });
 };
 

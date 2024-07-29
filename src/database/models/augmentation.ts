@@ -3,6 +3,7 @@ import connection from "../connection";
 import { AugmentationAlgorithms } from "types/augmentation-algorithm.enum";
 
 interface AugmentationAttributes {
+  id?: number;
   algorithm: AugmentationAlgorithms;
   fromPercentage: number;
   toPercentage: number;

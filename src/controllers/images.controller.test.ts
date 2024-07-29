@@ -12,7 +12,7 @@ describe("datasets controller", () => {
     it("calls gateway.createImagesBatch", async () => {
       const { req, res } = setup({ images: [{}, {}] });
       await createImagesBatch(req, res);
-      expect(gateway.createImagesBatch).toHaveBeenCalled();
+      expect(gateway.createImagesBatch).toHaveBeenCalledWith([{}, {}]);
     });
 
     it("calls setDefaultImageProps", async () => {
@@ -27,9 +27,10 @@ describe("datasets controller", () => {
       expect(setDefaultImageProps.mock.calls[1][0]).toEqual({ id: 2 });
     });
 
-    it("calls send", async () => {
+    it("calls status and send", async () => {
       const { req, res } = setup({ images: [] });
       await createImagesBatch(req, res);
+      expect(res.status).toHaveBeenCalledWith(201);
       expect(res.send).toHaveBeenCalledWith([
         { name: "img1.jpg" },
         { name: "img2.jpg" },
