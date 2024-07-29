@@ -55,7 +55,7 @@ export const validateImagesMetadataBatch = [
       const keys = Object.keys(metadata);
       if (keys.length !== 1) {
         throw new Error(
-          'Metadata should have only 1 property: "class" or "annotations"'
+          'Metadata should have only 1 property: "class" or "annotations"',
         );
       }
 

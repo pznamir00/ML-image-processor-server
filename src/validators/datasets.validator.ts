@@ -14,7 +14,7 @@ export const validateDataset = [
   body("type")
     .isIn([Types.CLASSIFICATION, Types.OBJECT_DETECTION])
     .withMessage(
-      `Should be ${Types.CLASSIFICATION} or ${Types.OBJECT_DETECTION}`
+      `Should be ${Types.CLASSIFICATION} or ${Types.OBJECT_DETECTION}`,
     )
     .bail(),
 ];

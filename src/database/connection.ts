@@ -12,7 +12,7 @@ const connection: Sequelize = new Sequelize(
     dialect: config.dialect as Dialect,
     port: config.port,
     logging: false,
-  }
+  },
 );
 
 export default connection;

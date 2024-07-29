@@ -15,14 +15,14 @@ augmentationsRouter.post(
   "/batch/",
   validateAugmentations,
   throwErrorIfValidationFailed,
-  createAugmentationsBatch
+  createAugmentationsBatch,
 );
 
 augmentationsRouter.delete(
   "/batch/",
   validateAugmentationIds,
   throwErrorIfValidationFailed,
-  deleteAugmentationsBatch
+  deleteAugmentationsBatch,
 );
 
 export default augmentationsRouter;

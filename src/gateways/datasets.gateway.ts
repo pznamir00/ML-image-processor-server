@@ -1,6 +1,7 @@
 import Image from "../database/models/image";
 import Augmentation from "../database/models/augmentation";
 import Dataset from "../database/models/dataset";
+import { checkEntitiesExistByIds } from "../utils/gateway.utils";
 
 export const findAllDatasets = async () => {
   return await Dataset.findAll();
@@ -11,16 +12,8 @@ export const checkDatasetExistsById = async (id: number) => {
   return count > 0;
 };
 
-/**
- * returns empty array if all ids are correct, if not, invalid ids
- * are in the list
- */
 export const checkDatasetsExistByIds = async (ids: number[]) => {
-  const result = await Dataset.findAll({
-    where: { id: ids },
-  });
-  const resultIds = result.map((i) => i.id);
-  return ids.filter((id) => !resultIds.includes(id));
+  return await checkEntitiesExistByIds(Dataset, ids);
 };
 
 export const findDatasetById = async (id: number) => {

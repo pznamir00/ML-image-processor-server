@@ -52,7 +52,7 @@ export const validateAugmentationIds = [
     const invalidIds = await checkAugmentationsExistByIds(ids);
     if (invalidIds.length) {
       throw new Error(
-        `Augmentations with ids ${invalidIds.join(", ")} do not exist`
+        `Augmentations with ids ${invalidIds.join(", ")} do not exist`,
       );
     }
     return true;

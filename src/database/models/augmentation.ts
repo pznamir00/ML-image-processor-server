@@ -33,7 +33,7 @@ Augmentation.init(
   {
     sequelize: connection,
     modelName: "Augmentation",
-  }
+  },
 );
 
 export default Augmentation;

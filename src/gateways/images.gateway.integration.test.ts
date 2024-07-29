@@ -44,7 +44,7 @@ describe("images gateway", () => {
   describe("updateImagesBatch", () => {
     it("updates batch images", async () => {
       await updateImagesBatch(
-        savedImages.map((i) => ({ ...i, name: "updated" })) as any
+        savedImages.map((i) => ({ ...i, name: "updated" })) as any,
       );
       const objects = await Image.findAll();
       expect(objects).toHaveLength(2);

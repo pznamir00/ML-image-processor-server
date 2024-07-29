@@ -1,3 +1,4 @@
+import { checkEntitiesExistByIds } from "../utils/gateway.utils";
 import Augmentation from "../database/models/augmentation";
 
 export const createAugmentationsBatch = async (
@@ -6,16 +7,8 @@ export const createAugmentationsBatch = async (
   return await Augmentation.bulkCreate(augmentations);
 };
 
-/**
- * returns empty array if all ids are correct, if not, invalid ids
- * are in the list
- */
 export const checkAugmentationsExistByIds = async (ids: number[]) => {
-  const result = await Augmentation.findAll({
-    where: { id: ids },
-  });
-  const resultIds = result.map((i) => i.id);
-  return ids.filter((id) => !resultIds.includes(id));
+  return await checkEntitiesExistByIds(Augmentation, ids);
 };
 
 export const deleteAugmentationsBatch = async (ids: number[]) => {

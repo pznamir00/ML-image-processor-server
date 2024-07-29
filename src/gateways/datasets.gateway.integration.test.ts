@@ -61,7 +61,7 @@ describe("datasets gateway", () => {
               datasetId: id,
             }),
           ],
-        })
+        }),
       );
     });
 

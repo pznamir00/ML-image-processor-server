@@ -20,14 +20,14 @@ datasetsRouter.post(
   "/",
   validateDataset,
   throwErrorIfValidationFailed,
-  createDataset
+  createDataset,
 );
 
 datasetsRouter.get(
   "/:id",
   validateDatasetId,
   throwErrorIfValidationFailed,
-  retrieveDataset
+  retrieveDataset,
 );
 
 datasetsRouter.put(
@@ -35,14 +35,14 @@ datasetsRouter.put(
   validateDatasetId,
   validateDataset,
   throwErrorIfValidationFailed,
-  updateDataset
+  updateDataset,
 );
 
 datasetsRouter.delete(
   "/:id",
   validateDatasetId,
   throwErrorIfValidationFailed,
-  deleteDataset
+  deleteDataset,
 );
 
 export default datasetsRouter;

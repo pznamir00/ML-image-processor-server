@@ -4,7 +4,7 @@ import { validationResult } from "express-validator";
 export const throwErrorIfValidationFailed = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {

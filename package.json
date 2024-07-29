@@ -8,10 +8,12 @@
     "build": "tsc",
     "dev": "nodemon src/index.ts",
     "test:unit": "node node_modules/.bin/jest --testPathPattern='^(?!.*.integration.test.ts$).*$'",
-    "test:integration": "npm run test:integration:db:start && node node_modules/.bin/jest --watch --runInBand --testPathPattern='.integration.test.ts$'; JEST_EXIT_CODE=$?; npm run test:integration:db:teardown; exit $JEST_EXIT_CODE",
+    "test:integration": "npm run test:integration:db:start && node node_modules/.bin/jest --runInBand --testPathPattern='.integration.test.ts$'; JEST_EXIT_CODE=$?; npm run test:integration:db:teardown; exit $JEST_EXIT_CODE",
     "test:all": "npm run test:unit && npm run test:integration",
     "test:integration:db:start": "tests/integration/start-db.sh",
-    "test:integration:db:teardown": "tests/integration/tear-down-db.sh"
+    "test:integration:db:teardown": "tests/integration/tear-down-db.sh",
+    "check-formatting": "prettier '**/*.ts' '**/*.tsx' '**/*.scss' --no-error-on-unmatched-pattern --check && eslint --ext .ts,.tsx,.scss",
+    "check-duplicates": "jscpd --threshold 0.02 --format 'typescript,ts' ./src"
   },
   "repository": {
     "type": "git",
@@ -32,11 +34,15 @@
     "@types/supertest": "^6.0.2",
     "@types/uuid": "^10.0.0",
     "dotenv": "^16.4.5",
+    "eslint": "8.57",
     "express": "^4.19.2",
     "express-validator": "^7.1.0",
+    "jscpd": "^4.0.5",
     "pg": "^8.12.0",
     "pg-hstore": "^2.3.4",
+    "prettier": "^3.2.5",
     "sequelize": "^6.37.3",
+    "serverless-http": "^3.2.0",
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.3",
     "ts-node": "^10.9.2",
@@ -63,6 +69,12 @@
       "js",
       "json",
       "node"
+    ]
+  },
+  "jscpd": {
+    "ignore": [
+      "**/*.test.ts",
+      "src/database/**/*"
     ]
   }
 }

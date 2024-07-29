@@ -32,7 +32,7 @@ Image.init(
   {
     sequelize: connection,
     modelName: "Image",
-  }
+  },
 );
 
 export default Image;

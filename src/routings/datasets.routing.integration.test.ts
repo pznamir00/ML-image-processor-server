@@ -63,7 +63,7 @@ describe("datasets routing integration", () => {
         expect.objectContaining({
           name: "new dataset",
           type: DatasetTypes.OBJECT_DETECTION,
-        })
+        }),
       );
     });
   });
@@ -118,7 +118,7 @@ describe("datasets routing integration", () => {
               isUploaded: false,
             }),
           ],
-        })
+        }),
       );
       expect(response.status).toBe(200);
     });

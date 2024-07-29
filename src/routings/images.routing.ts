@@ -17,21 +17,21 @@ imagesRouter.post(
   "/batch/",
   validateCreatingImages,
   throwErrorIfValidationFailed,
-  createImagesBatch
+  createImagesBatch,
 );
 
 imagesRouter.put(
   "/metadata/batch/",
   validateImagesMetadataBatch,
   throwErrorIfValidationFailed,
-  updateImagesBatch
+  updateImagesBatch,
 );
 
 imagesRouter.delete(
   "/batch/",
   validateImageIds,
   throwErrorIfValidationFailed,
-  deleteImagesBatch
+  deleteImagesBatch,
 );
 
 export default imagesRouter;
