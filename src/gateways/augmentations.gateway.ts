@@ -2,7 +2,7 @@ import { checkEntitiesExistByIds } from "../utils/gateway.utils";
 import Augmentation from "../database/models/augmentation";
 
 export const createAugmentationsBatch = async (
-  augmentations: Augmentation[]
+  augmentations: Augmentation[],
 ) => {
   return await Augmentation.bulkCreate(augmentations);
 };

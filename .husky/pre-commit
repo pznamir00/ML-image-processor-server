@@ -1,0 +1,3 @@
+npm run check-formatting
+npm run check-duplicates
+npm run test:all

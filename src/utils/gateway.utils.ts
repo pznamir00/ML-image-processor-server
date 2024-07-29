@@ -6,7 +6,7 @@ import { Model, ModelStatic } from "sequelize";
  */
 export const checkEntitiesExistByIds = async (
   model: ModelStatic<Model>,
-  ids: number[]
+  ids: number[],
 ) => {
   const result = await model.findAll({
     where: { id: ids },

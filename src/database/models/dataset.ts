@@ -26,7 +26,7 @@ Dataset.init(
   {
     sequelize: connection,
     modelName: "Dataset",
-  }
+  },
 );
 
 Dataset.hasMany(Augmentation, {
