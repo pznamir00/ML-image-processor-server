@@ -1,8 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
 import datasetsRouter from "./routings/datasets.routing";
-import imagesRouter from "routings/images.routing";
-import augmentationsRouter from "routings/augmentations.routing";
+import imagesRouter from "./routings/images.routing";
+import augmentationsRouter from "./routings/augmentations.routing";
 
 dotenv.config();
 const port = process.env.PORT;

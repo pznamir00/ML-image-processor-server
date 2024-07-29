@@ -1,6 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 import connection from "../connection";
-import { DatasetTypes } from "types/dataset-types.enum";
+import { DatasetTypes } from "../../types/dataset-types.enum";
 import Augmentation from "./augmentation";
 import Image from "./image";
 
@@ -26,7 +26,7 @@ Dataset.init(
   {
     sequelize: connection,
     modelName: "Dataset",
-  },
+  }
 );
 
 Dataset.hasMany(Augmentation, {

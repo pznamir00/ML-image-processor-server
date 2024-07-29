@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import * as gateway from "../gateways/augmentations.gateway";
-import Augmentation from "database/models/augmentation";
+import Augmentation from "../database/models/augmentation";
 
 export const createAugmentationsBatch = async (req: Request, res: Response) => {
   const payload: Augmentation[] = req.body.augmentations;

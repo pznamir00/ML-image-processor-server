@@ -2,7 +2,6 @@
   "compilerOptions": {
     "allowJs": true,
     "module": "Node16",
-    "baseUrl": "./src",
     "allowUnreachableCode": false,
     "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true,
@@ -20,8 +19,10 @@
     "pretty": true,
     "target": "es6",
     "typeRoots": ["./src/typings", "./node_modules/@types"],
+    "baseUrl": "./",
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "moduleResolution": "Node16"
   },
   "include": ["./**/*.ts"],
   "exclude": ["node_modules", "build", "dist", "src/**/*.test.ts"]

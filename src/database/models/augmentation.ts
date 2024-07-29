@@ -1,6 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 import connection from "../connection";
-import { AugmentationAlgorithms } from "types/augmentation-algorithm.enum";
+import { AugmentationAlgorithms } from "../../types/augmentation-algorithm.enum";
 
 interface AugmentationAttributes {
   id?: number;
@@ -33,7 +33,7 @@ Augmentation.init(
   {
     sequelize: connection,
     modelName: "Augmentation",
-  },
+  }
 );
 
 export default Augmentation;
