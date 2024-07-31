@@ -50,6 +50,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
+      - name: Remove previous images from ECR # for cost savings
+        run: |
+          image_tags=$(aws ecr list-images --repository-name ${{ secrets.REPOSITORY_NAME }} --query 'imageIds[*].imageTag' --region ${{ secrets.AWS_REGION }} --output text)
+          for tag in $image_tags; do aws ecr batch-delete-image --repository-name ${{ secrets.REPOSITORY_NAME }} --region ${{ secrets.AWS_REGION }} --image-ids imageTag=$tag > /dev/null; done
+
       - name: Push Docker image to Amazon ECR
         run: |
           aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_REGISTRY_URL }}
@@ -78,9 +83,6 @@ jobs:
             echo "Pulling image from ECR..."
             echo "Docker pull command: docker pull \"${{ secrets.AWS_REGISTRY_URL }}/${{ secrets.REPOSITORY_NAME }}:${{ env.TAG }}\""
             echo "Docker pull completed..."
-
-            image_tags=$(aws ecr list-images --repository-name ${{ secrets.REPOSITORY_NAME }} --query 'imageIds[*].imageTag' --region ${{ secrets.AWS_REGION }} --output text)
-            for tag in $image_tags; do aws ecr batch-delete-image --repository-name ${{ secrets.REPOSITORY_NAME }} --region ${{ secrets.AWS_REGION }} --image-ids imageTag=$tag > /dev/null; done
 
             echo "Running the container..."
             echo 'docker run -d -p "${{ secrets.PORT }}:${{ secrets.PORT }}" "${{ secrets.AWS_REGISTRY_URL }}/${{ secrets.REPOSITORY_NAME }}:${{ env.TAG }}"'
