@@ -61,6 +61,8 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          envs: |
+            TAG=${TAG}
           script: |
             echo "AWS CLI version: $(aws --version)"
             echo "Docker version: $(docker --version)"
@@ -72,9 +74,9 @@ jobs:
             echo "Logged in successful..."
 
             echo "Pulling image from ECR..."
-            echo "Docker pull command: docker pull \"${{ secrets.AWS_REGISTRY_URL }}/${{ secrets.REPOSITORY_NAME }}:${TAG}\""
+            echo "Docker pull command: docker pull \"${{ secrets.AWS_REGISTRY_URL }}/${{ secrets.REPOSITORY_NAME }}:${{ env.TAG }}\""
             echo "Docker pull completed..."
 
             echo "Running the container..."
-            echo 'docker run -d -p "${{ secrets.PORT }}:${{ secrets.PORT }}" "${{ secrets.AWS_REGISTRY_URL }}/${{ secrets.REPOSITORY_NAME }}:$TAG"'
-            docker run -d -p "${{ secrets.PORT }}:${{ secrets.PORT }}" "${{ secrets.AWS_REGISTRY_URL }}/${{ secrets.REPOSITORY_NAME }}:${TAG}"
+            echo 'docker run -d -p "${{ secrets.PORT }}:${{ secrets.PORT }}" "${{ secrets.AWS_REGISTRY_URL }}/${{ secrets.REPOSITORY_NAME }}:${{ env.TAG }}"'
+            docker run -d -p "${{ secrets.PORT }}:${{ secrets.PORT }}" "${{ secrets.AWS_REGISTRY_URL }}/${{ secrets.REPOSITORY_NAME }}:${{ env.TAG }}"
