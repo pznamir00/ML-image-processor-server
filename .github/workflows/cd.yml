@@ -40,6 +40,16 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Create .env file
+        run: |
+          echo "PORT=${{ secrets.APP_PORT }}" >> .env
+          echo "BUCKET=${{ secrets.AWS_BUCKET }}" >> .env
+          echo "PROD_DB_USERNAME=${{ secrets.PROD_DB_USERNAME }}" >> .env
+          echo "PROD_DB_PASSWORD=${{ secrets.PROD_DB_PASSWORD }}" >> .env
+          echo "PROD_DB_NAME=${{ secrets.PROD_DB_NAME }}" >> .env
+          echo "PROD_DB_HOST=${{ secrets.PROD_DB_HOST }}" >> .env
+          echo "PROD_DB_PORT=${{ secrets.PROD_DB_PORT }}" >> .env
+
       - name: Build Docker image
         run: docker build -t "${{ secrets.REPOSITORY_NAME }}" .
 
@@ -88,5 +98,5 @@ jobs:
             echo "Docker pull completed..."
 
             echo "Running the container..."
-            echo 'docker run -d -p "${{ secrets.PORT }}:${{ secrets.PORT }}" "${{ secrets.AWS_REGISTRY_URL }}/${{ secrets.REPOSITORY_NAME }}:${{ env.TAG }}"'
-            docker run -d -p "${{ secrets.PORT }}:${{ secrets.PORT }}" "${{ secrets.AWS_REGISTRY_URL }}/${{ secrets.REPOSITORY_NAME }}:${{ env.TAG }}"
+            echo 'docker run -d -p "${{ secrets.APP_PORT }}:${{ secrets.APP_PORT }}" "${{ secrets.AWS_REGISTRY_URL }}/${{ secrets.REPOSITORY_NAME }}:${{ env.TAG }}"'
+            docker run -d -p "${{ secrets.APP_PORT }}:${{ secrets.APP_PORT }}" "${{ secrets.AWS_REGISTRY_URL }}/${{ secrets.REPOSITORY_NAME }}:${{ env.TAG }}"
