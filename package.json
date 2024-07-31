@@ -16,8 +16,7 @@
     "check-formatting": "prettier '**/*.ts' '**/*.tsx' '**/*.scss' --no-error-on-unmatched-pattern --check && eslint --ext .ts,.tsx,.scss",
     "check-duplicates": "jscpd --threshold 0.02 --format 'typescript,ts' ./src",
     "db:migrate": "npx sequelize-cli db:migrate",
-    "db:migrate:prod": "NODE_ENV=production npm run db:migrate",
-    "prepare": "husky"
+    "db:migrate:prod": "NODE_ENV=production npm run db:migrate"
   },
   "repository": {
     "type": "git",
