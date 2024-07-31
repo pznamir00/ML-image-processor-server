@@ -51,7 +51,7 @@ jobs:
           echo "PROD_DB_PORT=${{ secrets.PROD_DB_PORT }}" >> .env
 
       - name: Build Docker image
-        run: docker build -t "${{ secrets.REPOSITORY_NAME }}" .
+        run: docker build . -t "${{ secrets.REPOSITORY_NAME }}" -f Dockerfile.production
 
       - name: Tag Docker image
         run: docker tag "${{ secrets.REPOSITORY_NAME }}" "${{ secrets.AWS_REGISTRY_URL }}/${{ secrets.REPOSITORY_NAME }}:${TAG}"
