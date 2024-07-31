@@ -7,7 +7,7 @@ IMAGE_NAME="ml-image-processor-server-test-image"
 CONTAINER_NAME="ml-image-processor-server-test-container"
 PORT=5433
 
-docker build -t $IMAGE_NAME tests/integration
+docker build -t $IMAGE_NAME integration-test-env
 docker run -d -p $PORT:5433 --name $CONTAINER_NAME $IMAGE_NAME
 
 # wait for PG to be ready
