@@ -76,4 +76,4 @@ jobs:
             echo "Docker pull completed..."
 
             echo "Running the container..."
-            docker run -d -p ${{ secrets.PORT }}:${{ secrets.PORT }} "${{ secrets.AWS_REGISTRY_URL }}/${{ secrets.REPOSITORY_NAME }}:${TAG}"
+            docker run -d -p "${{ secrets.PORT }}:${{ secrets.PORT }}" "${{ secrets.AWS_REGISTRY_URL }}/${{ secrets.REPOSITORY_NAME }}:${TAG}"
