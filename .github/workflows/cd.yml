@@ -41,6 +41,8 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: build-artifacts
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           path: dist
 
       # create .env file with DB credentials (stored in GH secrets) 
