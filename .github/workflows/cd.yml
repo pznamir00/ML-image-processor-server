@@ -68,6 +68,7 @@ jobs:
             echo "Docker version: $(docker --version)"
 
             docker system prune -f
+            docker rm -vf $(docker ps -aq)
 
             echo "Logging in to ECR...."
             aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_REGISTRY_URL }}
