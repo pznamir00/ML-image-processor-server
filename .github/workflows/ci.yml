@@ -1,0 +1,64 @@
+name: Continuous Integration
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+jobs:
+  check-duplicates-and-formatting:
+    name: 'Check duplicates and formatting'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - uses: actions/checkout@v2
+      name: 'Checkout repository'
+
+    - name: 'Cache Node modules'
+      uses: actions/cache@v3
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: 'Install Dependencies'
+      run: npm install
+
+    - name: 'Check Formatting'
+      run: npm run check-formatting
+
+    - name: 'Check Duplicates'
+      run: npm run check-duplicates
+      
+  test:
+    name: 'Run tests'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - uses: actions/checkout@v2
+      name: 'Checkout repository'
+
+    - name: 'Cache Node modules'
+      uses: actions/cache@v3
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: 'Install Dependencies'
+      run: npm install
+      
+    - name: 'Run unit tests'
+      run: npm run test:unit
+
+    - name: 'Run integration tests'
+      run: npm run test:integration
