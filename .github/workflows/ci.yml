@@ -35,6 +35,36 @@ jobs:
 
     - name: 'Check Duplicates'
       run: npm run check-duplicates
+
+  build:
+    name: 'Build the app'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - uses: actions/checkout@v2
+      name: 'Checkout repository'
+
+    - name: 'Cache Node modules'
+      uses: actions/cache@v3
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: 'Install Dependencies'
+      run: npm install
+
+    - name: Build
+      run: npm run build
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: build-artifacts
+        path: dist
       
   test:
     name: 'Run tests'

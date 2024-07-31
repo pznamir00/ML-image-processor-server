@@ -37,9 +37,14 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build
-        run: npm run build
+      - name: Download build artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: build-artifacts
+          path: dist
 
+      # create .env file with DB credentials (stored in GH secrets) 
+      # since it's needed for app start
       - name: Create .env file
         run: |
           echo "PORT=${{ secrets.APP_PORT }}" >> .env
