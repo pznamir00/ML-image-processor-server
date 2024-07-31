@@ -24,7 +24,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 14
+          node-version: 20
 
       - name: 'Cache Node modules'
         uses: actions/cache@v3
@@ -70,11 +70,7 @@ jobs:
             echo "AWS CLI version: $(aws --version)"
             echo "Docker version: $(docker --version)"
 
-            echo "Stop the current running container if exist..."
-            docker stop container_name || true
-
-            echo "Remove the previous container..."
-            docker rm container_name || true
+            docker system prune -f
 
             echo "AWS credentials set...."
             export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
