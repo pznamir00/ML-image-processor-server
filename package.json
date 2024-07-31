@@ -17,7 +17,7 @@
     "check-duplicates": "jscpd --threshold 0.02 --format 'typescript,ts' ./src",
     "db:migrate": "npx sequelize-cli db:migrate",
     "db:migrate:prod": "NODE_ENV=production npm run db:migrate",
-    "prepare": "node -e \"if (process.env.NODE_ENV !== 'production'){process.exit(1)} \" || husky install"
+    "prepare": "husky"
   },
   "repository": {
     "type": "git",
