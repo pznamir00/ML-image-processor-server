@@ -1,0 +1,14 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  IsUploadFlagSwitch:
+    Type: 'AWS::Lambda::Function'
+    Properties:
+      FunctionName: IsUploadFlagSwitch
+      Handler: index.handler
+      Role: arn:aws:iam::123456789012:role/lambda-execution-role
+      Code:
+        S3Bucket: my-bucket
+        S3Key: functions/is-uploaded-flag-switch.zip
+      Runtime: node20
+      Timeout: 10
+      MemorySize: 128
