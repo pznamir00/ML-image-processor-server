@@ -18,6 +18,8 @@ jobs:
   deploy-cloudformation:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+
       - name: Deploy to CloudFormation
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
