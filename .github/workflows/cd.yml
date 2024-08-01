@@ -15,7 +15,38 @@ permissions:
   id-token: write
 
 jobs:
-  deploy:
+  deploy-functions:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        item: [
+          is-uploaded-flag-switch
+        ]
+
+    steps:
+      # download build /dist artifact 
+      # (with both /src (app) and /functions (lambdas))
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: dist
+
+      # uploads Lambda functions to S3
+      - name: Upload lambda to S3
+        uses: NotCoffee418/s3-zip-upload@v1.4
+        env:
+          AWS_SECRET_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          BUCKET_NAME: ${{ secrets.AWS_BUCKET }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          SOURCE_MODE: ZIP
+          SOURCE_PATH: ./dist/functions/${{ matrix.item }}
+          DEST_FILE: functions/${{ matrix.item }}.zip
+
+  deploy-app:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -46,18 +77,6 @@ jobs:
           run-id: ${{ github.event.workflow_run.id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path: dist
-
-      # uploads Lambda functions to S3
-      - name: Upload ZIP to S3
-        uses: NotCoffee418/s3-zip-upload@v1.4
-        env:
-          AWS_SECRET_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          BUCKET_NAME: ${{ secrets.AWS_BUCKET }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-          SOURCE_MODE: ZIP
-          SOURCE_PATH: ./dist/functions/is-uploaded-flag-switch
-          DEST_FILE: functions/is-uploaded-flag-switch.zip
 
       # create .env file with DB credentials (stored in GH secrets) 
       # since it's needed for app start
