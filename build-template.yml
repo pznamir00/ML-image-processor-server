@@ -1,0 +1,70 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Resources:
+  LambdaOnS3UploadTriggerRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: 'lambda.amazonaws.com'
+            Action: 'sts:AssumeRole'
+      Policies:
+        - PolicyName: 'LambdaBasicExecution'
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'logs:CreateLogGroup'
+                  - 'logs:CreateLogStream'
+                  - 'logs:PutLogEvents'
+                Resource: 'arn:aws:logs:*:*:*'
+              - Effect: Allow
+                Action:
+                  - 's3:GetObject'
+                  - 's3:ListBucket'
+                Resource: 'arn:aws:s3:::ml-images-processor-server/*'
+
+  IsUploadedFlagSwitch:
+    Type: 'AWS::Lambda::Function'
+    Properties:
+      Handler: 'index.handler'
+      Role: !GetAtt LambdaOnS3UploadTriggerRole.Arn
+      Code:
+        S3Bucket: ml-images-processor-server
+        S3Key: functions/is-uploaded-flag-switch.zip
+      Runtime: 'nodejs18.x'
+      Timeout: 30
+
+  MLImagesProcessorBucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: ml-images-processor-server
+      NotificationConfiguration:
+        LambdaConfigurations:
+          - Event: 's3:ObjectCreated:*'
+            Filter:
+              S3Key:
+                Rules:
+                  - Name: 'prefix'
+                    Value: 'images/'
+            Function: !GetAtt IsUploadedFlagSwitch.Arn
+
+  MyLambdaPermission:
+    Type: 'AWS::Lambda::Permission'
+    Properties:
+      FunctionName: !Ref IsUploadedFlagSwitch
+      Action: 'lambda:InvokeFunction'
+      Principal: 's3.amazonaws.com'
+      SourceArn: !GetAtt MLImagesProcessorBucket.Arn
+
+Outputs:
+  LambdaFunctionName:
+    Value: !Ref IsUploadedFlagSwitch
+    Description: 'Name of the Lambda function'
+  S3BucketName:
+    Value: !Ref MLImagesProcessorBucket
+    Description: 'Name of the S3 bucket'
