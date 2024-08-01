@@ -5,9 +5,9 @@ Resources:
     Properties:
       FunctionName: IsUploadFlagSwitch
       Handler: index.handler
-      Role: arn:aws:iam::123456789012:role/lambda-execution-role
+      Role: arn:aws:iam::381491932671:role/service-role/s3-read-file-permission
       Code:
-        S3Bucket: my-bucket
+        S3Bucket: ml-images-processor-server
         S3Key: functions/is-uploaded-flag-switch.zip
       Runtime: node20
       Timeout: 10
