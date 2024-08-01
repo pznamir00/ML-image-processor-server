@@ -1,14 +1,19 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Resources:
-  IsUploadFlagSwitch:
-    Type: 'AWS::Lambda::Function'
+  lambdaFunction:
+    Type: AWS::Serverless::Function
     Properties:
-      FunctionName: IsUploadFlagSwitch
-      Handler: index.handler
-      Role: arn:aws:iam::381491932671:role/service-role/s3-read-file-permission
-      Code:
-        S3Bucket: ml-images-processor-server
-        S3Key: functions/is-uploaded-flag-switch.zip
-      Runtime: nodejs18.x
-      Timeout: 10
+      CodeUri:
+        Bucket: ml-images-processor-server
+        Key: functions/is-uploaded-flag-switch.zip
+      Handler: function.handler
       MemorySize: 128
+      Runtime: nodejs18.x
+      Role: arn:aws:iam::aws:policy/AmazonS3FullAccess
+      Timeout: 10
+      # Events:
+      #   NRSubscription0:
+      #     Type: CloudWatchLogs
+      #     Properties:
+      #       LogGroupName: 'someLogGroupName'
+      #       FilterPattern: ""
