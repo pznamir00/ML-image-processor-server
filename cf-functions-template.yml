@@ -1,4 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+
 Resources:
   lambdaFunction:
     Type: AWS::Serverless::Function
@@ -11,9 +13,3 @@ Resources:
       Runtime: nodejs18.x
       Role: arn:aws:iam::aws:policy/AmazonS3FullAccess
       Timeout: 10
-      # Events:
-      #   NRSubscription0:
-      #     Type: CloudWatchLogs
-      #     Properties:
-      #       LogGroupName: 'someLogGroupName'
-      #       FilterPattern: ""
