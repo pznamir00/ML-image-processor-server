@@ -21,9 +21,9 @@
     "typeRoots": ["./src/typings", "./node_modules/@types"],
     "baseUrl": "./",
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": "./",
     "moduleResolution": "Node16"
   },
   "include": ["./**/*.ts"],
-  "exclude": ["node_modules", "build", "dist", "src/**/*.test.ts"]
+  "exclude": ["node_modules", "build", "dist", "src/**/*.test.ts", "data"]
 }

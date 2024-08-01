@@ -1,3 +1,10 @@
 node_modules/
 data/
-tests/
+
+# files needed only for performing integration tests
+# that are done before an image building
+integration-test-env/
+
+# lambda functions that are exported just to S3 and not used
+# by build app itself
+dist/functions/

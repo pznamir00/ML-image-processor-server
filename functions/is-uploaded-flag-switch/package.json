@@ -1,0 +1,17 @@
+{
+  "name": "is-uploaded-flag-switch",
+  "version": "1.0.0",
+  "description": "Sets file isUploaded flag to true on s3 upload event. The function is triggered automatically on the event",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [
+    "image",
+    "file",
+    "upload",
+    "lambda",
+    "aws",
+    "s3"
+  ],
+  "author": "pznamir00",
+  "license": "ISC"
+}
