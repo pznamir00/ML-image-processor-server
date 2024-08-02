@@ -15,7 +15,39 @@ permissions:
   id-token: write
 
 jobs:
+  deploy-functions-code:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        item: [
+          is-uploaded-flag-switch
+        ]
+
+    steps:
+      # download build /dist artifact 
+      # (with both /src (app) and /functions (lambdas))
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: dist
+
+      # uploads Lambda functions to S3
+      - name: Upload lambda to S3
+        uses: NotCoffee418/s3-zip-upload@v1.4
+        env:
+          AWS_SECRET_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          BUCKET_NAME: ml-images-processor-functions
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          SOURCE_MODE: ZIP
+          SOURCE_PATH: ./dist/functions/${{ matrix.item }}
+          DEST_FILE: ${{ matrix.item }}.zip
+
   deploy-cloudformation:
+    needs: deploy-functions-code
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

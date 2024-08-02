@@ -34,23 +34,18 @@ Resources:
       Handler: 'index.handler'
       Role: !GetAtt LambdaOnS3UploadTriggerRole.Arn
       Code:
-        S3Bucket: ml-images-processor-server
-        S3Key: functions/is-uploaded-flag-switch.zip
+        S3Bucket: ml-images-processor-functions
+        S3Key: is-uploaded-flag-switch.zip
       Runtime: 'nodejs18.x'
       Timeout: 30
 
-  MLImagesProcessorBucket:
+  MLImagesProcessorImagesBucket:
     Type: 'AWS::S3::Bucket'
     Properties:
-      BucketName: ml-images-processor-server
+      BucketName: ml-images-processor-images
       NotificationConfiguration:
         LambdaConfigurations:
           - Event: 's3:ObjectCreated:*'
-            Filter:
-              S3Key:
-                Rules:
-                  - Name: 'prefix'
-                    Value: 'images/'
             Function: !GetAtt IsUploadedFlagSwitch.Arn
 
   MyLambdaPermission:
@@ -59,12 +54,12 @@ Resources:
       FunctionName: !Ref IsUploadedFlagSwitch
       Action: 'lambda:InvokeFunction'
       Principal: 's3.amazonaws.com'
-      SourceArn: !GetAtt MLImagesProcessorBucket.Arn
+      SourceArn: !GetAtt MLImagesProcessorImagesBucket.Arn
 
 Outputs:
   LambdaFunctionName:
     Value: !Ref IsUploadedFlagSwitch
     Description: 'Name of the Lambda function'
   S3BucketName:
-    Value: !Ref MLImagesProcessorBucket
+    Value: !Ref MLImagesProcessorImagesBucket
     Description: 'Name of the S3 bucket'
