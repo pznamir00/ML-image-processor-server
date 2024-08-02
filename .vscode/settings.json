@@ -1,0 +1,7 @@
+{
+    "yaml.customTags": [
+        "!Sub scalar",
+        "!Ref scalar",
+        "!GetAtt scalar",
+    ]
+}

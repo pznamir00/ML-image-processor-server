@@ -64,6 +64,7 @@ jobs:
         with:
           name: ml-images-processor-cf-stack
           template: build-template.yml
+          no-fail-on-empty-changeset: "1"
 
   deploy-app:
     runs-on: ubuntu-latest
