@@ -37,7 +37,7 @@ Resources:
       Role: !GetAtt LambdaOnS3UploadTriggerRole.Arn
       Code:
         S3Bucket: ml-images-processor-functions
-        S3Key: !Sub 'is-uploaded-flag-switch-${CommitSha}.zip'
+        S3Key: !Sub 'is-uploaded-flag-switch-${Tag}.zip'
       Runtime: 'nodejs18.x'
       Timeout: 30
 
