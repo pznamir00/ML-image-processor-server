@@ -29,8 +29,6 @@ Resources:
                 Resource:
                   - 'arn:aws:s3:::ml-images-processor-functions'
                   - 'arn:aws:s3:::ml-images-processor-functions/*'
-                  - 'arn:aws:s3:::ml-images-processor-images'
-                  - 'arn:aws:s3:::ml-images-processor-images/*'
 
   IsUploadedFlagSwitch:
     Type: 'AWS::Lambda::Function'
@@ -43,6 +41,14 @@ Resources:
       Runtime: 'nodejs18.x'
       Timeout: 30
 
+  MyLambdaPermission:
+    Type: 'AWS::Lambda::Permission'
+    Properties:
+      FunctionName: !Ref IsUploadedFlagSwitch
+      Action: 'lambda:InvokeFunction'
+      Principal: 's3.amazonaws.com'
+      SourceArn: !Sub 'arn:aws:s3:::ml-images-processor-images'
+
   MLImagesProcessorImagesBucket:
     Type: 'AWS::S3::Bucket'
     Properties:
@@ -51,14 +57,7 @@ Resources:
         LambdaConfigurations:
           - Event: 's3:ObjectCreated:*'
             Function: !GetAtt IsUploadedFlagSwitch.Arn
-
-  MLImagesProcessorLambdaOnS3UploadPermission:
-    Type: 'AWS::Lambda::Permission'
-    Properties:
-      FunctionName: !Ref IsUploadedFlagSwitch
-      Action: 'lambda:InvokeFunction'
-      Principal: 's3.amazonaws.com'
-      SourceArn: !GetAtt MLImagesProcessorImagesBucket.Arn
+    DependsOn: MyLambdaPermission
 
 Outputs:
   LambdaFunctionName:
