@@ -1,5 +1,10 @@
 AWSTemplateFormatVersion: '2010-09-09'
 
+Parameters:
+  Tag:
+    Type: String
+    Description: Commit Tag for distinguish resources
+
 Resources:
   LambdaOnS3UploadTriggerRole:
     Type: 'AWS::IAM::Role'
