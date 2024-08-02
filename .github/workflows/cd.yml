@@ -132,6 +132,7 @@ jobs:
 
             docker system prune -f
             docker rm -vf $(docker ps -aq)
+            docker rmi -f $(docker images -aq)
 
             echo "Logging in to ECR...."
             aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_REGISTRY_URL }}
