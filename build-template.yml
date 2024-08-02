@@ -37,11 +37,11 @@ Resources:
       Role: !GetAtt LambdaOnS3UploadTriggerRole.Arn
       Code:
         S3Bucket: ml-images-processor-functions
-        S3Key: is-uploaded-flag-switch.zip
+        S3Key: !Sub 'is-uploaded-flag-switch-${CommitSha}.zip'
       Runtime: 'nodejs18.x'
       Timeout: 30
 
-  MyLambdaPermission:
+  LambdaOnS3UploadPermission:
     Type: 'AWS::Lambda::Permission'
     Properties:
       FunctionName: !Ref IsUploadedFlagSwitch
@@ -57,7 +57,7 @@ Resources:
         LambdaConfigurations:
           - Event: 's3:ObjectCreated:*'
             Function: !GetAtt IsUploadedFlagSwitch.Arn
-    DependsOn: MyLambdaPermission
+    DependsOn: LambdaOnS3UploadPermission
 
 Outputs:
   LambdaFunctionName:
