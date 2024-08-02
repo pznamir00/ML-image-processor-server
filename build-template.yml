@@ -51,7 +51,6 @@ Resources:
         LambdaConfigurations:
           - Event: 's3:ObjectCreated:*'
             Function: !GetAtt IsUploadedFlagSwitch.Arn
-    DependsOn: MLImagesProcessorLambdaOnS3UploadPermission
 
   MLImagesProcessorLambdaOnS3UploadPermission:
     Type: 'AWS::Lambda::Permission'
