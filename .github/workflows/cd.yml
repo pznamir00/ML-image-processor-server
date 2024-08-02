@@ -32,7 +32,6 @@ jobs:
         with:
           name: ml-images-processor-cf-stack
           template: build-template.yml
-          parameter-overrides: "Region=${{ secrets.AWS_REGION }}"
 
   deploy-app:
     runs-on: ubuntu-latest
