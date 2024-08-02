@@ -26,7 +26,11 @@ Resources:
                 Action:
                   - 's3:GetObject'
                   - 's3:ListBucket'
-                Resource: 'arn:aws:s3:::ml-images-processor-server/*'
+                Resource:
+                  - 'arn:aws:s3:::ml-images-processor-functions'
+                  - 'arn:aws:s3:::ml-images-processor-functions/*'
+                  - 'arn:aws:s3:::ml-images-processor-images'
+                  - 'arn:aws:s3:::ml-images-processor-images/*'
 
   IsUploadedFlagSwitch:
     Type: 'AWS::Lambda::Function'
@@ -47,8 +51,9 @@ Resources:
         LambdaConfigurations:
           - Event: 's3:ObjectCreated:*'
             Function: !GetAtt IsUploadedFlagSwitch.Arn
+    DependsOn: MLImagesProcessorLambdaOnS3UploadPermission
 
-  MyLambdaPermission:
+  MLImagesProcessorLambdaOnS3UploadPermission:
     Type: 'AWS::Lambda::Permission'
     Properties:
       FunctionName: !Ref IsUploadedFlagSwitch
