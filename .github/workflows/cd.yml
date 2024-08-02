@@ -36,6 +36,7 @@ jobs:
 
   deploy-functions-code:
     runs-on: ubuntu-latest
+    needs: cleanup-functions-bucket
     strategy:
       matrix:
         item: [
