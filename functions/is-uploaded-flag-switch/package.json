@@ -13,5 +13,8 @@
     "s3"
   ],
   "author": "pznamir00",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "is-ten": "^0.1.0"
+  }
 }
