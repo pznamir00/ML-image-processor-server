@@ -61,11 +61,12 @@ Resources:
       Runtime: "nodejs18.x"
       Timeout: 30
       Environment:
-        DbHost: ${DBHost}
-        DbName: ${DBName}
-        DbUser: ${DBUser}
-        DbPassword: ${DBPassword}
-        DbPort: ${DBPort}
+        Variables:
+          dbHost: ${DBHost}
+          dbName: ${DBName}
+          dbUser: ${DBUser}
+          dbPassword: ${DBPassword}
+          dbPort: ${DBPort}
 
   LambdaOnS3UploadPermission:
     Type: "AWS::Lambda::Permission"
