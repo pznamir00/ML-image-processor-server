@@ -1,73 +1,94 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 
 Parameters:
   Tag:
     Type: String
     Description: Commit Tag for distinguish resources
+  DBHost:
+    Type: String
+    Description: DB host
+  DBName:
+    Type: String
+    Description: DB name
+  DBUser:
+    Type: String
+    Description: DB user
+  DBPassword:
+    Type: String
+    Description: DB password
+  DBPort:
+    Type: String
+    Description: DB port
 
 Resources:
   LambdaOnS3UploadTriggerRole:
-    Type: 'AWS::IAM::Role'
+    Type: "AWS::IAM::Role"
     Properties:
       AssumeRolePolicyDocument:
-        Version: '2012-10-17'
+        Version: "2012-10-17"
         Statement:
           - Effect: Allow
             Principal:
-              Service: 'lambda.amazonaws.com'
-            Action: 'sts:AssumeRole'
+              Service: "lambda.amazonaws.com"
+            Action: "sts:AssumeRole"
       Policies:
-        - PolicyName: 'LambdaBasicExecution'
+        - PolicyName: "LambdaBasicExecution"
           PolicyDocument:
-            Version: '2012-10-17'
+            Version: "2012-10-17"
             Statement:
               - Effect: Allow
                 Action:
-                  - 'logs:CreateLogGroup'
-                  - 'logs:CreateLogStream'
-                  - 'logs:PutLogEvents'
-                Resource: 'arn:aws:logs:*:*:*'
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                Resource: "arn:aws:logs:*:*:*"
               - Effect: Allow
                 Action:
-                  - 's3:GetObject'
-                  - 's3:ListBucket'
+                  - "s3:GetObject"
+                  - "s3:ListBucket"
                 Resource:
-                  - 'arn:aws:s3:::ml-images-processor-functions'
-                  - 'arn:aws:s3:::ml-images-processor-functions/*'
+                  - "arn:aws:s3:::ml-images-processor-functions"
+                  - "arn:aws:s3:::ml-images-processor-functions/*"
 
   IsUploadedFlagSwitch:
-    Type: 'AWS::Lambda::Function'
+    Type: "AWS::Lambda::Function"
     Properties:
-      Handler: 'index.handler'
+      Handler: "index.handler"
       Role: !GetAtt LambdaOnS3UploadTriggerRole.Arn
       Code:
         S3Bucket: ml-images-processor-functions
-        S3Key: !Sub 'is-uploaded-flag-switch-${Tag}.zip'
-      Runtime: 'nodejs18.x'
+        S3Key: !Sub "is-uploaded-flag-switch-${Tag}.zip"
+      Runtime: "nodejs18.x"
       Timeout: 30
+      Environment:
+        - DB_HOST: ${DBHost}
+        - DB_NAME: ${DBName}
+        - DB_USER: ${DBUser}
+        - DB_PASSWORD: ${DBPassword}
+        - DB_PORT: ${DBPort}
 
   LambdaOnS3UploadPermission:
-    Type: 'AWS::Lambda::Permission'
+    Type: "AWS::Lambda::Permission"
     Properties:
       FunctionName: !Ref IsUploadedFlagSwitch
-      Action: 'lambda:InvokeFunction'
-      Principal: 's3.amazonaws.com'
-      SourceArn: !Sub 'arn:aws:s3:::ml-images-processor-images'
+      Action: "lambda:InvokeFunction"
+      Principal: "s3.amazonaws.com"
+      SourceArn: !Sub "arn:aws:s3:::ml-images-processor-images"
 
   MLImagesProcessorImagesBucket:
-    Type: 'AWS::S3::Bucket'
+    Type: "AWS::S3::Bucket"
     Properties:
       BucketName: ml-images-processor-images
       NotificationConfiguration:
         LambdaConfigurations:
-          - Event: 's3:ObjectCreated:*'
+          - Event: "s3:ObjectCreated:*"
             Function: !GetAtt IsUploadedFlagSwitch.Arn
     DependsOn: LambdaOnS3UploadPermission
 
 Outputs:
   LambdaFunctionName:
     Value: !Ref IsUploadedFlagSwitch
-    Description: 'Name of the Lambda function'
+    Description: "Name of the Lambda function"
   S3BucketName:
     Value: !Ref MLImagesProcessorImagesBucket
-    Description: 'Name of the S3 bucket'
+    Description: "Name of the S3 bucket"

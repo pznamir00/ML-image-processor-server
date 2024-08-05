@@ -10,85 +10,85 @@ on:
 
 jobs:
   check-duplicates-and-formatting:
-    name: 'Check duplicates and formatting'
+    name: "Check duplicates and formatting"
     runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
     steps:
-    - uses: actions/checkout@v2
-      name: 'Checkout repository'
+      - uses: actions/checkout@v2
+        name: "Checkout repository"
 
-    - name: 'Cache Node modules'
-      uses: actions/cache@v3
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
+      - name: "Cache Node modules"
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
-    - name: 'Install Dependencies'
-      run: npm install
+      - name: "Install Dependencies"
+        run: npm install
 
-    - name: 'Check Formatting'
-      run: npm run check-formatting
+      - name: "Check Formatting"
+        run: npm run check-formatting
 
-    - name: 'Check Duplicates'
-      run: npm run check-duplicates
+      - name: "Check Duplicates"
+        run: npm run check-duplicates
 
   build:
-    name: 'Build the app'
+    name: "Build the app"
     runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
     steps:
-    - uses: actions/checkout@v2
-      name: 'Checkout repository'
+      - uses: actions/checkout@v2
+        name: "Checkout repository"
 
-    - name: 'Cache Node modules'
-      uses: actions/cache@v3
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
+      - name: "Cache Node modules"
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
-    - name: 'Install Dependencies'
-      run: npm install
+      - name: "Install Dependencies"
+        run: npm install
 
-    - name: Build
-      run: npm run build
+      - name: Build
+        run: npm run build
 
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: build-artifacts
-        path: dist
-      
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: dist
+
   test:
-    name: 'Run tests'
+    name: "Run tests"
     runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
     steps:
-    - uses: actions/checkout@v2
-      name: 'Checkout repository'
+      - uses: actions/checkout@v2
+        name: "Checkout repository"
 
-    - name: 'Cache Node modules'
-      uses: actions/cache@v3
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
+      - name: "Cache Node modules"
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
-    - name: 'Install Dependencies'
-      run: npm install
-      
-    - name: 'Run unit tests'
-      run: npm run test:unit
+      - name: "Install Dependencies"
+        run: npm install
 
-    - name: 'Run integration tests'
-      run: npm run test:integration
+      - name: "Run unit tests"
+        run: npm run test:unit
+
+      - name: "Run integration tests"
+        run: npm run test:integration

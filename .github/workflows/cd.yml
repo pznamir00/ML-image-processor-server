@@ -33,18 +33,15 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-
   deploy-functions-code:
     runs-on: ubuntu-latest
     needs: cleanup-functions-bucket
     strategy:
       matrix:
-        item: [
-          is-uploaded-flag-switch
-        ]
+        item: [is-uploaded-flag-switch]
 
     steps:
-      # download build /dist artifact 
+      # download build /dist artifact
       # (with both /src (app) and /functions (lambdas))
       - name: Download build artifacts
         uses: actions/download-artifact@v4
@@ -56,7 +53,7 @@ jobs:
 
       # install dependencies so that the lambda will
       # be able to use them
-      - name: 'Install dependencies'
+      - name: "Install dependencies"
         run: |
           cd ./dist/functions/${{ matrix.item }}
           npm install --production
@@ -92,7 +89,13 @@ jobs:
           name: ml-images-processor-cf-stack
           template: build-template.yml
           no-fail-on-empty-changeset: "1"
-          parameter-overrides: "Tag=${{ env.TAG }}"
+          parameter-overrides: >-
+            Tag=${{ env.TAG }},
+            DBHost=${{ secrets.PROD_DB_HOST }},
+            DBUser=${{ secrets.PROD_DB_PORT }},
+            DBPassword=${{ secrets.PROD_DB_PASSWORD }},
+            DBPort=${{ secrets.PROD_DB_PORT }},
+            DBName=${{ secrets.PROD_DB_NAME }}
 
   deploy-app:
     runs-on: ubuntu-latest
@@ -100,7 +103,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # download build /dist artifact 
+      # download build /dist artifact
       # (with both /src (app) and /functions (lambdas))
       - name: Download build artifacts
         uses: actions/download-artifact@v4
@@ -110,7 +113,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path: dist
 
-      # create .env file with DB credentials (stored in GH secrets) 
+      # create .env file with DB credentials (stored in GH secrets)
       # since it's needed for app start
       - name: Create .env file
         run: |
