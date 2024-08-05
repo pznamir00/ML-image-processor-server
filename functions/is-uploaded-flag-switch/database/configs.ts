@@ -8,11 +8,11 @@ export const configs = {
     port: 5433,
   },
   production: {
-    username: process.env.DBUser || "",
-    password: process.env.DBPassword || "",
-    database: process.env.DBName || "",
-    host: process.env.DBHost || "",
-    port: +(process.env.DBPort || 5432),
+    username: process.env.DbUser || "",
+    password: process.env.DbPassword || "",
+    database: process.env.DbName || "",
+    host: process.env.DbHost || "",
+    port: +(process.env.DbPort || 5432),
     dialect: "postgres",
     dialectOptions: {
       ssl: {
