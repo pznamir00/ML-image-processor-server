@@ -67,6 +67,7 @@ Resources:
           dbUser: ${DBUser}
           dbPassword: ${DBPassword}
           dbPort: ${DBPort}
+          NODE_ENV: production
 
   LambdaOnS3UploadPermission:
     Type: "AWS::Lambda::Permission"
